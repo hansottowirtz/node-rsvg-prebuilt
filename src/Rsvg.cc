@@ -143,14 +143,14 @@ NAN_METHOD(Rsvg::SetDPI) {
     Nan::HandleScope scope;
     Rsvg* obj = ObjectWrap::Unwrap<Rsvg>(ARGVAR.This());
 
-    gdouble x = ARGVAR[0]->NumberValue();
+    gdouble x = ARGVAR[0]->NumberValue(Nan::GetCurrentContext()).FromJust();
     if (std::isnan(x)) {
         x = 0;
     }
 
     gdouble y = x;
     if (ARGVAR[1]->IsNumber()) {
-        y = ARGVAR[1]->NumberValue();
+        y = ARGVAR[1]->NumberValue(Nan::GetCurrentContext()).FromJust();
         if (std::isnan(y)) {
             y = 0;
         }
@@ -500,7 +500,7 @@ v8::Local<v8::Number> Rsvg::GetNumberProperty (const char* property, const ARGTY
 void Rsvg::SetNumberProperty (const char* property, const ARGTYPE& ARGVAR) {
     Nan::HandleScope scope;
     Rsvg* obj = ObjectWrap::Unwrap<Rsvg>(ARGVAR.This());
-    gdouble value = ARGVAR[0]->NumberValue();
+    gdouble value = ARGVAR[0]->NumberValue(Nan::GetCurrentContext()).FromJust();
     if (std::isnan(value)) {
         value = 0;
     }
