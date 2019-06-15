@@ -289,8 +289,8 @@ NAN_METHOD(Rsvg::Render) {
     Nan::HandleScope scope;
     Rsvg* obj = ObjectWrap::Unwrap<Rsvg>(ARGVAR.This());
 
-    int width = ARGVAR[0]->Int32Value();
-    int height = ARGVAR[1]->Int32Value();
+    int width = ARGVAR[0]->Int32Value(Nan::GetCurrentContext()).FromJust();
+    int height = ARGVAR[1]->Int32Value(Nan::GetCurrentContext()).FromJust();
 
     if (width <= 0) {
         Nan::ThrowError("Expected width > 0.");
@@ -518,7 +518,7 @@ v8::Local<v8::Integer> Rsvg::GetIntegerProperty (const char* property, const ARG
 void Rsvg::SetIntegerProperty (const char* property, const ARGTYPE& ARGVAR) {
     Nan::HandleScope scope;
     Rsvg* obj = ObjectWrap::Unwrap<Rsvg>(ARGVAR.This());
-    gint value = ARGVAR[0]->Int32Value();
+    gint value = ARGVAR[0]->Int32Value(Nan::GetCurrentContext()).FromJust();
     g_object_set(G_OBJECT(obj->_handle), property, value, NULL);
 }
 
