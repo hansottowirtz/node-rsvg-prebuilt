@@ -70,8 +70,21 @@ NAN_MODULE_INIT(Rsvg::Init) {
     Nan::Set(target, Nan::New("Rsvg").ToLocalChecked(), tplFunc);
 }
 
+// #define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+// #define BYTE_TO_BINARY(byte)  \
+//   (byte & 0x80 ? '1' : '0'), \
+//   (byte & 0x40 ? '1' : '0'), \
+//   (byte & 0x20 ? '1' : '0'), \
+//   (byte & 0x10 ? '1' : '0'), \
+//   (byte & 0x08 ? '1' : '0'), \
+//   (byte & 0x04 ? '1' : '0'), \
+//   (byte & 0x02 ? '1' : '0'), \
+//   (byte & 0x01 ? '1' : '0') 
+  
 NAN_METHOD(Rsvg::New) {
     Nan::HandleScope scope;
+
+    // v8::Local<Object> obj = Nan::To<Object>(info[1]).ToLocalChecked();
 
     if (ARGVAR.IsConstructCall()) {
         // Invoked as constructor: `new Rsvg(...)`
@@ -90,7 +103,30 @@ NAN_METHOD(Rsvg::New) {
                 return ARGVAR.GetReturnValue().Set(Nan::Undefined());
             }
         } else {
-            handle = rsvg_handle_new_with_flags((RsvgHandleFlags)(RSVG_HANDLE_FLAG_KEEP_IMAGE_DATA | RSVG_HANDLE_FLAG_UNLIMITED));
+            // Goal: make unlimited flag settable
+            RsvgHandleFlags flags = (RsvgHandleFlags)(RSVG_HANDLE_FLAG_KEEP_IMAGE_DATA | RSVG_HANDLE_FLAG_UNLIMITED);
+            
+            // if (ARGVAR[0]->IsObject()) {
+            //     printf("Is object\n");
+            // }
+
+            // Object obj = ARGVAR[0]->ToObject();
+
+            // if ( {
+            //     printf("Alow\n");
+            //     Nan::ThrowError("First argument should be an object");
+            //     return ARGVAR.GetReturnValue().Set(Nan::Undefined());   
+            // }
+            // Nan::MaybeLocal<v8::Object> flagsObject = Nan::To<v8::Object>(ARGVAR[0]);
+            // if (flagsObject.IsEmpty()) {
+            //     printf("No flags given\n");
+            // } else {
+            //     printf("Flags given\n");
+            // }
+
+            // printf("Flags " BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(flags));
+            // printf("\n");
+            handle = rsvg_handle_new_with_flags(flags);
         }
         // Error handling.
         if (!handle) {
